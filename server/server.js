@@ -2,30 +2,30 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 // To parse the cookie
-const cookieParser = require("cookie-parser");  
+const cookieParser = require("cookie-parser");
 
 // To allow cross-origin requests
-const cors = require("cors"); 
+const cors = require("cors");
 const authRouter = require("./routes/auth/auth-routes");
 const { registerUser } = require("./controllers/auth/auth-controller");
 
 const adminProductsRouter = require("./routes/admin/products-routes");
 
-const shopProductsRouter = require('./routes/shop/products-routes')
+const shopProductsRouter = require('./routes/shop/products-routes');
 
-const shopCartRouter = require('./routes/shop/cart-routes')
+const shopCartRouter = require('./routes/shop/cart-routes');
 
-const shopAddressRouter = require('./routes/shop/address-routes')
+const shopAddressRouter = require('./routes/shop/address-routes');
 
-const shopOrderRouter = require('./routes/shop/order-routes')
+const shopOrderRouter = require('./routes/shop/order-routes');
 
-const adminOrderRouter = require('./routes/admin/order-routes')
+const adminOrderRouter = require('./routes/admin/order-routes');
 
-const shopSearchRouter = require('./routes/shop/search-routes')
+const shopSearchRouter = require('./routes/shop/search-routes');
 
-const shopReviewRouter = require('./routes/shop/review-routes')
+const shopReviewRouter = require('./routes/shop/review-routes');
 
-const commonFeatureImagesRouter = require('./routes/common/feature-routes')
+const commonFeatureImagesRouter = require('./routes/common/feature-routes');
 
 const helmet = require("helmet");
 
@@ -45,26 +45,22 @@ const app = express(); // CREATE THE EXPRESS APP
 const PORT = process.env.PORT || 8080; // Backend server will run on 8080
 
 // To allow cross-origin requests
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: ["GET", "POST", "DELETE", "PUT"],
-    allowedHeaders: [
-      "Content-Type",
-      "Authorization",
-      "Cache-Control",
-      "Expires",
-      "Pragma",
-    ],
-    credentials: true,
-  })
-);
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, Cache-Control, Expires, Pragma"
+  );
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 //To parse the cookie that we send from frontend
 app.use(cookieParser());
