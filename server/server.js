@@ -43,7 +43,7 @@ const PORT = process.env.PORT || 8080; // Backend server will run on 8080
 app.use(
   cors({
     
-    origin: "http://localhost:5173",
+    origin: "https://shop-loop-ten.vercel.app/",
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: [
       "Content-Type",
