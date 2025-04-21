@@ -29,6 +29,11 @@ const commonFeatureImagesRouter = require('./routes/common/feature-routes')
 
 const helmet = require("helmet");
 
+const allowedOrigins = [
+  "http://localhost:5173", // local dev frontend
+  "https://shop-loop-ten.vercel.app", // vercel production
+];
+
 mongoose
   .connect(
     "mongodb+srv://amalspillaihalo:hBrjQNFlvY1UqScD@shoploop.wq4zegx.mongodb.net/"
@@ -42,8 +47,13 @@ const PORT = process.env.PORT || 8080; // Backend server will run on 8080
 // To allow cross-origin requests
 app.use(
   cors({
-    
-    origin: "https://shop-loop-ten.vercel.app/",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: [
       "Content-Type",
