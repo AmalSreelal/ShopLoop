@@ -1,0 +1,15 @@
+# .gitignore
+
+# Node
+node_modules/
+server/node_modules/
+
+# React
+client/node_modules/
+client/dist/
+
+# OS files
+.DS_Store
+
+# Env files
+*.env
